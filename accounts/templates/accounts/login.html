@@ -20,7 +20,8 @@
                 <input id="username" type="text"
                        name="username" required
                        autocomplete="username"
-                       class="form-control">
+                       class="form-control"
+                       value="{{ template_data.username|default:'' }}">
               </p>
               <p>
                 <label for="password">Password</label>

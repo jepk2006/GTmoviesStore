@@ -20,13 +20,28 @@ def login(request):
         return render(request, 'accounts/login.html',
             {'template_data': template_data})
     elif request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+        
+        if not username or not password:
+            template_data['error'] = 'Please enter both username and password.'
+            template_data['username'] = username
+            return render(request, 'accounts/login.html',
+                {'template_data': template_data})
+        
         user = authenticate(
             request,
-            username = request.POST['username'],
-            password = request.POST['password']
+            username=username,
+            password=password
         )
         if user is None:
             template_data['error'] = 'The username or password is incorrect.'
+            template_data['username'] = username
+            return render(request, 'accounts/login.html',
+                {'template_data': template_data})
+        elif not user.is_active:
+            template_data['error'] = 'This account has been deactivated.'
+            template_data['username'] = username
             return render(request, 'accounts/login.html',
                 {'template_data': template_data})
         else:
@@ -44,8 +59,9 @@ def signup(request):
     elif request.method == 'POST':
         form = CustomUserCreationForm(request.POST, error_class=CustomErrorList)
         if form.is_valid():
-            form.save()
-            return redirect('accounts.login')
+            user = form.save()
+            auth_login(request, user)
+            return redirect('home.index')
         else:
             template_data['form'] = form
             return render(request, 'accounts/signup.html',

@@ -28,6 +28,9 @@
             <div class="vr bg-white mx-2 d-noned-lg-block"></div>
             {% if user.is_authenticated %}
             <a class="nav-link" href="{% url 'accounts.orders' %}">Orders</a>
+            {% if user.is_superuser %}
+            <a class="nav-link" href="/admin/">Admin Panel</a>
+            {% endif %}
             <a class="nav-link" href="{% url 'accounts.logout' %}">Logout ({{user.username }})</a>
             {% else %}
             <a class="nav-link" href="{% url 'accounts.login' %}">Login</a>
@@ -47,23 +50,27 @@
       <div class="container">
         <div class="row mt-3 text-white">
           <div class="col-md-6 col-lg-6 col-xl-6 mx-auto mb-4">
-            <b>MOVIES STORE</b>
+            <b>GT MOVIES STORE</b>
             <hr />
             <p>
-              Welcome to Movies Store, your premier online destination for a cinematic adventure like no other! Dive into the world of movies from the comfort of your own home with our user-friendly and immersive online movie store.
+              GT Movies Store is a simple, student-built web app for discovering movies and placing orders. Browse our catalog, read reviews, add movies to your cart, and enjoy a responsive interface that works on all devices.
             </p>
           </div>
           <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-4">
             <b>LINKS</b>
             <hr />
+            <p><a class="nav-link" href="{% url 'home.index' %}">Home</a></p>
             <p><a class="nav-link" href="{% url 'home.about' %}">About</a></p>
+            <p><a class="nav-link" href="{% url 'movies.index' %}">Movies</a></p>
+            <p><a class="nav-link" href="{% url 'cart.index' %}">Cart</a></p>
+            <p><a class="nav-link" href="{% url 'accounts.login' %}">Login</a></p>
           </div>
           <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-4">
             <b>CONTACT</b>
             <hr />
-            <p><i class="fas fa-home me-2"></i> 150-2345 Tokyo-to, Japan</p>
-            <p><i class="fas fa-envelope me-2"></i> info@moviesstore.com</p>
-            <p><i class="fas fa-phone me-2"></i> +81 03-3333-3333</p>
+            <p><i class="fas fa-home me-2"></i> 351 Ferst Dr. NW, Atlanta, GA</p>
+            <p><i class="fas fa-envelope me-2"></i> info@GTmoviesStore.com</p>
+            <p><i class="fas fa-phone me-2"></i> +1 (404) 123-456</p>
           </div>
         </div>
       </div>

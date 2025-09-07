@@ -2,21 +2,36 @@
 {% block content %}
 <header class="masthead bg-index text-white text-center py-4">
   <div class="container d-flex align-items-center flex-column pt-2">
-    <h2>Movies Store</h2>
+    <h2>GT Movies Store</h2>
     <p>Your Ticket to Unlimited Entertainment!</p>
   </div>
 </header>
+{% if template_data.random_movies %}
 <div class="p-3">
   <div class="container">
-    <div class="row mt-3">
-      <div class="col mx-auto text-center mb-3">
-        <div class="content-wrapper">
-          <h4>Welcome to the best movie store!!</h4>
-          <p class="lead">Discover amazing movies and entertainment for the whole family.</p>
-          <button class="btn btn-custom btn-lg mt-3">Browse Movies</button>
+    <div class="row">
+      <div class="col-12">
+        <h3 class="text-center mb-5">Featured Movies</h3>
+        <div class="row justify-content-center">
+          {% for movie in template_data.random_movies %}
+          <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-4">
+            <div class="card h-100 text-center shadow-sm">
+              <img src="{{ movie.image.url }}" class="card-img-top" alt="{{ movie.name }}" style="height: 250px; object-fit: cover;">
+              <div class="card-body d-flex flex-column">
+                <h6 class="card-title">{{ movie.name }}</h6>
+                <p class="card-text text-muted">${{ movie.price }}</p>
+                <a href="{% url 'movies.show' id=movie.id %}" class="btn btn-primary btn-sm mt-auto">View Details</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+          <a href="{% url 'movies.index' %}" class="btn btn-outline-primary btn-lg">Browse All Movies</a>
         </div>
       </div>
     </div>
   </div>
 </div>
+{% endif %}
 {% endblock content %}

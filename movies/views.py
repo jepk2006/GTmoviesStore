@@ -10,7 +10,8 @@ def index(request):
         movies = Movie.objects.all()
     template_data = {}
     template_data['title'] = 'Movies'
-    template_data['movies'] = Movie.objects.all()
+    template_data['movies'] = movies
+    template_data['search_term'] = search_term
     return render(request, 'movies/index.html',
                   {'template_data': template_data})
 
@@ -58,7 +59,8 @@ def edit_review(request, id, review_id):
 
 @login_required
 def delete_review(request, id, review_id):
-    review = get_object_or_404(Review, id=review_id,
-        user=request.user)
+    review = get_object_or_404(Review, id=review_id)
+    if request.user != review.user:
+        return redirect('movies.show', id=id)
     review.delete()
     return redirect('movies.show', id=id)
