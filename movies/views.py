@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie, Review
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 def index(request):
     search_term = request.GET.get('search')
@@ -63,4 +64,19 @@ def delete_review(request, id, review_id):
     if request.user != review.user:
         return redirect('movies.show', id=id)
     review.delete()
+    return redirect('movies.show', id=id)
+
+def report_review(request, id, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    movie = get_object_or_404(Movie, id=id)
+    
+    # Prevent authenticated users from reporting their own reviews
+    if request.user.is_authenticated and request.user == review.user:
+        messages.error(request, "You cannot report your own review.")
+        return redirect('movies.show', id=id)
+    
+    # Delete the review immediately when reported
+    review.delete()
+    messages.success(request, "Review has been reported and removed from the page.")
+    
     return redirect('movies.show', id=id)
