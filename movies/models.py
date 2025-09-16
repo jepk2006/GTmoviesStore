@@ -19,5 +19,9 @@ class Review(models.Model):
         on_delete=models.CASCADE)
     user = models.ForeignKey(User,
         on_delete=models.CASCADE)
+    is_reported = models.BooleanField(default=False)
+    reported_by = models.ManyToManyField(User, related_name='reported_reviews', blank=True)
+    report_count = models.IntegerField(default=0)
+    is_hidden = models.BooleanField(default=False)
     def __str__(self):
         return str(self.id) + ' - ' + self.movie.name
