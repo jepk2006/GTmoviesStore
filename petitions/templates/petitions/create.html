@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-3 mt-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow p-3 mb-4 rounded">
+          <div class="card-body">
+            <h2>Create Movie Petition</h2>
+            <hr />
+            {% if template_data.error %}
+            <div class="alert alert-danger" role="alert">
+              {{ template_data.error }}
+            </div>
+            {% endif %}
+            <form method="POST">
+              {% csrf_token %}
+              <p>
+                <label for="title">Movie Title:</label>
+                <input id="title" type="text" name="title" required 
+                       class="form-control" 
+                       value="{{ template_data.title_value|default:'' }}"
+                       placeholder="e.g., The Matrix Resurrections">
+              </p>
+              <p>
+                <label for="description">Why should this movie be added?</label>
+                <textarea id="description" name="description" required 
+                          class="form-control" rows="4"
+                          placeholder="Explain why you think this movie should be added to our catalog...">{{ template_data.description_value|default:'' }}</textarea>
+              </p>
+              <div class="text-center">
+                <button type="submit" class="btn bg-dark text-white">Create Petition</button>
+                <a href="{% url 'petitions.index' %}" class="btn btn-secondary">Cancel</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

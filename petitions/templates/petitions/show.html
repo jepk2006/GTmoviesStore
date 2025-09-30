@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-3 mt-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow p-3 mb-4 rounded">
+          <div class="card-body">
+            <h2>{{ template_data.petition.title }}</h2>
+            <hr />
+            <p><strong>Description:</strong></p>
+            <p>{{ template_data.petition.description }}</p>
+            
+            <div class="row mt-4">
+              <div class="col-md-6">
+                <p class="text-muted">
+                  <small>Created by <strong>{{ template_data.petition.created_by.username }}</strong></small><br>
+                  <small>{{ template_data.petition.created_at|date:"F d, Y \a\t g:i A" }}</small>
+                </p>
+              </div>
+              <div class="col-md-6 text-end">
+                <h4 class="text-success">
+                  {{ template_data.vote_count }} vote{{ template_data.vote_count|pluralize }}
+                </h4>
+              </div>
+            </div>
+            
+            <hr />
+            
+            {% if user.is_authenticated %}
+              {% if template_data.user_has_voted %}
+                <div class="alert alert-success">
+                  <i class="fas fa-check-circle"></i> You have already voted for this petition!
+                </div>
+              {% else %}
+                <form method="POST" action="{% url 'petitions.vote' id=template_data.petition.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fas fa-thumbs-up"></i> Vote YES for this movie!
+                  </button>
+                </form>
+              {% endif %}
+            {% else %}
+              <div class="alert alert-warning">
+                <a href="{% url 'accounts.login' %}">Login</a> to vote on this petition!
+              </div>
+            {% endif %}
+            
+            <div class="mt-3">
+              <a href="{% url 'petitions.index' %}" class="btn btn-secondary">Back to All Petitions</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

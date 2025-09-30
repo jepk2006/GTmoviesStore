@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-3 mt-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Movie Petitions</h2>
+        <hr />
+        {% if user.is_authenticated %}
+        <div class="mb-3">
+          <a href="{% url 'petitions.create' %}" class="btn bg-dark text-white">Create New Petition</a>
+        </div>
+        {% endif %}
+        
+        {% if template_data.petitions %}
+        <div class="row">
+          {% for petition in template_data.petitions %}
+          <div class="col-md-6 mb-4">
+            <div class="card shadow">
+              <div class="card-body">
+                <h5 class="card-title">{{ petition.title }}</h5>
+                <p class="card-text">{{ petition.description|truncatewords:20 }}</p>
+                <p class="text-muted">
+                  <small>Created by {{ petition.created_by.username }} on {{ petition.created_at|date:"M d, Y" }}</small>
+                </p>
+                <p class="text-success">
+                  <strong>{{ petition.get_vote_count }} vote{{ petition.get_vote_count|pluralize }}</strong>
+                </p>
+                <a href="{% url 'petitions.show' id=petition.id %}" class="btn btn-primary">View Details & Vote</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+          <p>No movie petitions yet. {% if user.is_authenticated %}<a href="{% url 'petitions.create' %}">Create the first one!</a>{% else %}Login to create the first petition!{% endif %}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
